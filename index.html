@@ -277,7 +277,6 @@
   function tryUnlock() {
     var val = normalize(pwInput.value || "");
     if (ANSWERS.indexOf(val) !== -1) {
-      sessionStorage.setItem("unlocked", "1");
       gate.style.display = "none";
       main.classList.add("show");
       startSparkles();
@@ -295,13 +294,6 @@
   pwInput.addEventListener("input", function () {
     pwInput.value = pwInput.value.replace(/\D/g, "").slice(0, 4);
   });
-
-  if (sessionStorage.getItem("unlocked") === "1") {
-    gate.style.display = "none";
-    main.classList.add("show");
-    startSparkles();
-    musicBtn.classList.add("show");
-  }
 
   var openBtn = document.getElementById("openBtn");
   var letterWrap = document.getElementById("letterWrap");
