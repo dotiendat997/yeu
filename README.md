@@ -1,4 +1,4 @@
-# Quà 20/10 cho Quyên
+# Quà 20/10 cho vợ
 
 Trang quà tặng cá nhân, một file `index.html` (HTML/CSS/JS thuần), có
 màn hình nhập mật khẩu nhẹ trước khi xem, nhạc nền tự tổng hợp bằng Web
