@@ -200,7 +200,7 @@
         var AC = window.AudioContext || window.webkitAudioContext;
         if (AC) ctx = new AC();
       }
-      if (ctx && ctx.state === "suspended") ctx.resume();
+      return ctx ? ctx.resume() : Promise.resolve();
     }
     function startDrone() {
       droneGain = ctx.createGain();
@@ -234,12 +234,14 @@
     }
     return {
       start: function () {
-        ensureCtx();
-        if (!ctx || playing) return;
+        if (playing) return;
         playing = true;
-        if (!droneGain) startDrone();
-        droneGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1.5);
-        scheduleLoop();
+        ensureCtx().then(function () {
+          if (!ctx || !playing) return;
+          if (!droneGain) startDrone();
+          droneGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1.5);
+          scheduleLoop();
+        });
       },
       stop: function () {
         playing = false;
