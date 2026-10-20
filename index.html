@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Gửi Quyên 💗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --pink-1: #ffe4ef;
+    --pink-2: #ffc2dd;
+    --pink-3: #ff8fc0;
+    --pink-deep: #e0558f;
+    --gold: #ffd9a0;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%; width: 100%;
+    font-family: "Quicksand", "Segoe UI", sans-serif;
+    background: linear-gradient(145deg, var(--pink-1), #fff5f8 40%, var(--pink-2));
+    color: #7a2d53;
+    overflow-x: hidden;
+  }
+  .script { font-family: "Great Vibes", cursive; }
+
+  /* ---------- floating background sparkles ---------- */
+  #bg { position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+  .drift {
+    position: absolute; bottom: -10vh; font-size: 22px; opacity: .55;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: .6; }
+    90%  { opacity: .55; }
+    100% { transform: translateY(-115vh) translateX(var(--dx, 30px)) rotate(360deg); opacity: 0; }
+  }
+
+  /* ---------- password gate ---------- */
+  #gate {
+    position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 30%, #fff0f6, var(--pink-2) 120%);
+    padding: 24px;
+  }
+  .gateCard {
+    background: #fffdfb; border-radius: 28px; padding: 40px 32px; max-width: 420px; width: 100%;
+    text-align: center; box-shadow: 0 20px 50px rgba(224, 85, 143, .25);
+    position: relative; z-index: 1;
+  }
+  .gateCard .heart { font-size: 54px; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  .gateCard h1 { font-size: clamp(22px, 6vw, 28px); margin: 10px 0 4px; color: var(--pink-deep); }
+  .gateCard p { margin: 0 0 20px; color: #a35c7d; font-size: 15px; }
+  #pwInput {
+    width: 100%; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--pink-2);
+    font-size: 17px; text-align: center; outline: none; font-family: inherit;
+    background: #fff;
+  }
+  #pwInput:focus { border-color: var(--pink-3); }
+  #pwBtn {
+    margin-top: 14px; width: 100%; padding: 14px; border: none; border-radius: 16px;
+    background: linear-gradient(135deg, var(--pink-3), var(--pink-deep)); color: #fff;
+    font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 0 #b73e73;
+  }
+  #pwBtn:active { transform: translateY(6px); box-shadow: 0 2px 0 #b73e73; }
+  .shake { animation: shake .4s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+  #pwHint { margin-top: 12px; font-size: 13px; color: #c98ca9; }
+
+  /* ---------- main content ---------- */
+  #main { position: relative; z-index: 1; display: none; }
+  #main.show { display: block; animation: fadeIn .8s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 20px 80px; text-align: center; }
+
+  .badge {
+    display: inline-block; padding: 8px 20px; border-radius: 999px;
+    background: #fff0f6; color: var(--pink-deep); font-weight: 700; font-size: 14px;
+    letter-spacing: .5px; box-shadow: 0 4px 12px rgba(224,85,143,.15);
+  }
+
+  h1.title {
+    font-size: clamp(30px, 8vw, 48px); margin: 18px 0 6px; color: var(--pink-deep);
+    text-shadow: 0 2px 0 #fff;
+  }
+  .toName { font-size: clamp(44px, 14vw, 84px); margin: 6px 0 26px; color: #c23f78; }
+
+  #openBtn {
+    margin-top: 10px; padding: 16px 40px; border: none; border-radius: 999px;
+    background: linear-gradient(135deg, var(--pink-3), var(--pink-deep)); color: #fff;
+    font-size: 18px; font-weight: 700; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 0 #b73e73, 0 16px 28px rgba(224,85,143,.3);
+  }
+  #openBtn:active { transform: translateY(6px); box-shadow: 0 2px 0 #b73e73; }
+
+  #letterWrap { margin-top: 36px; display: none; }
+  #letterWrap.show { display: block; animation: fadeIn 1s ease; }
+
+  .letter {
+    background: #fffdfb; border-radius: 24px; padding: 36px 30px; text-align: left;
+    box-shadow: 0 16px 40px rgba(224,85,143,.18); position: relative;
+  }
+  .letter::before {
+    content: "💌"; position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+    font-size: 40px;
+  }
+  .letter p { line-height: 1.85; font-size: 17px; color: #6b3350; margin: 0 0 16px; }
+  .letter .sign { text-align: right; font-size: 30px; color: var(--pink-deep); margin-top: 10px; }
+
+  .gallery {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 34px;
+  }
+  .heartSlot {
+    width: 92px; height: 92px; border-radius: 20px;
+    background: linear-gradient(135deg, #fff, var(--pink-1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; box-shadow: 0 6px 16px rgba(224,85,143,.15);
+  }
+
+  footer { margin-top: 56px; font-size: 13px; color: #c98ca9; }
+
+  #musicBtn {
+    position: fixed; top: 14px; right: 14px; z-index: 60;
+    width: 52px; height: 52px; border-radius: 50%; border: none;
+    background: #ffffffdd; font-size: 22px; cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,.15); display: none;
+  }
+  #musicBtn.show { display: block; }
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+
+<button id="musicBtn" aria-label="Tắt/bật nhạc">🎵</button>
+<div id="gate">
+  <div class="gateCard" id="gateCard">
+    <div class="heart">🔐💗</div>
+    <h1>Món quà nhỏ cho Quyên</h1>
+    <p>Nhập mật khẩu để mở nhé...</p>
+    <input id="pwInput" type="text" placeholder="Nhập ở đây" autocomplete="off" inputmode="text" />
+    <button id="pwBtn">Mở ra 🎀</button>
+    <div id="pwHint"></div>
+  </div>
+</div>
+
+<div id="main">
+  <div class="wrap">
+    <span class="badge">20 · 10 · Ngày Phụ Nữ Việt Nam</span>
+    <h1 class="title">Chúc mừng ngày của em</h1>
+    <div class="toName script">Quyên ơi</div>
+
+    <button id="openBtn">Mở thư 💌</button>
+
+    <div id="letterWrap">
+      <div class="letter">
+        <p>Gửi Quyên yêu thương,</p>
+        <p>Nhân ngày 20/10, anh muốn dừng lại một chút giữa những ngày bận rộn để nói với em một điều anh vẫn hay nghĩ nhưng ít khi nói thành lời: cảm ơn em.</p>
+        <p>Cảm ơn em đã luôn ở đó — những lúc vui, những lúc mệt, và cả những lúc chẳng cần nói gì mà vẫn hiểu nhau. Cảm ơn em vì đã là một người mẹ tuyệt vời, một người vợ anh luôn tự hào, và là người khiến tổ ấm nhỏ của chúng mình lúc nào cũng đầy ắp tiếng cười.</p>
+        <p>Anh biết đôi khi anh không giỏi thể hiện, nhưng mỗi ngày trôi qua bên em đều là một ngày anh thấy mình may mắn.</p>
+        <p>Chúc em một ngày 20/10 thật nhiều hoa, thật nhiều yêu thương — và mãi mãi là cô gái anh thương từ ngày 13/03 ấy.</p>
+        <div class="sign script">Yêu em, Anh 💗</div>
+      </div>
+
+      <div class="gallery">
+        <div class="heartSlot">📷</div>
+        <div class="heartSlot">💑</div>
+        <div class="heartSlot">👨‍👩‍👧</div>
+        <div class="heartSlot">💗</div>
+      </div>
+    </div>
+
+    <footer>Làm với 💗 ngày 20/10</footer>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- gentle background melody (synthesized, no external audio file) ----------
+  var music = (function () {
+    var ctx = null, droneGain = null, playing = false, loopTimer = null;
+    var LOOP_SEC = 8;
+    var PENTA = [523.25, 587.33, 659.25, 783.99, 880.00]; // C5 D5 E5 G5 A5
+    var MELODY = [
+      [0.0, 0], [1.0, 2], [2.0, 3], [2.5, 2], [3.0, 1],
+      [4.0, 0], [5.0, 1], [5.5, 2], [6.0, 3], [7.0, 4]
+    ];
+    function ensureCtx() {
+      if (!ctx) {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) ctx = new AC();
+      }
+      if (ctx && ctx.state === "suspended") ctx.resume();
+    }
+    function startDrone() {
+      droneGain = ctx.createGain();
+      droneGain.gain.value = 0;
+      droneGain.connect(ctx.destination);
+      [261.63, 392.00].forEach(function (freq) {
+        var osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        osc.connect(droneGain);
+        osc.start();
+      });
+    }
+    function playNote(freq, t, dur) {
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.13, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.connect(g).connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + dur + 0.05);
+    }
+    function scheduleLoop() {
+      if (!playing) return;
+      var base = ctx.currentTime + 0.05;
+      MELODY.forEach(function (n) { playNote(PENTA[n[1]], base + n[0], 0.9); });
+      loopTimer = setTimeout(scheduleLoop, LOOP_SEC * 1000);
+    }
+    return {
+      start: function () {
+        ensureCtx();
+        if (!ctx || playing) return;
+        playing = true;
+        if (!droneGain) startDrone();
+        droneGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1.5);
+        scheduleLoop();
+      },
+      stop: function () {
+        playing = false;
+        if (loopTimer) clearTimeout(loopTimer);
+        if (ctx && droneGain) droneGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+      },
+      toggle: function () {
+        if (playing) this.stop(); else this.start();
+        return playing;
+      }
+    };
+  })();
+
+  var musicBtn = document.getElementById("musicBtn");
+  musicBtn.addEventListener("click", function () {
+    var on = music.toggle();
+    musicBtn.textContent = on ? "🎵" : "🔇";
+  });
+
+  var ANSWERS = ["quennhau1303", "1303"];
+  function normalize(s) {
+    return s.toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/[^a-z0-9]/g, "");
+  }
+
+  var gate = document.getElementById("gate");
+  var gateCard = document.getElementById("gateCard");
+  var pwInput = document.getElementById("pwInput");
+  var pwBtn = document.getElementById("pwBtn");
+  var pwHint = document.getElementById("pwHint");
+  var main = document.getElementById("main");
+
+  function tryUnlock() {
+    var val = normalize(pwInput.value || "");
+    if (ANSWERS.indexOf(val) !== -1) {
+      sessionStorage.setItem("unlocked", "1");
+      gate.style.display = "none";
+      main.classList.add("show");
+      startSparkles();
+      musicBtn.classList.add("show");
+      music.start();
+    } else {
+      gateCard.classList.remove("shake");
+      void gateCard.offsetWidth;
+      gateCard.classList.add("shake");
+      pwHint.textContent = "Chưa đúng rồi, thử lại xem nào 🥺";
+    }
+  }
+  pwBtn.addEventListener("click", tryUnlock);
+  pwInput.addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock(); });
+
+  if (sessionStorage.getItem("unlocked") === "1") {
+    gate.style.display = "none";
+    main.classList.add("show");
+    startSparkles();
+    musicBtn.classList.add("show");
+  }
+
+  var openBtn = document.getElementById("openBtn");
+  var letterWrap = document.getElementById("letterWrap");
+  openBtn.addEventListener("click", function () {
+    letterWrap.classList.add("show");
+    openBtn.style.display = "none";
+    letterWrap.scrollIntoView({ behavior: "smooth", block: "start" });
+    burstHearts();
+  });
+
+  // ---------- floating background sparkles ----------
+  var bg = document.getElementById("bg");
+  var GLYPHS = ["💗", "✨", "🌸", "💕", "⭐"];
+  var started = false;
+  function startSparkles() {
+    if (started) return;
+    started = true;
+    for (var i = 0; i < 22; i++) spawnDrift(Math.random() * 10);
+  }
+  function spawnDrift(delay) {
+    var el = document.createElement("span");
+    el.className = "drift";
+    el.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    var left = Math.random() * 100;
+    var dur = 9 + Math.random() * 10;
+    el.style.left = left + "vw";
+    el.style.fontSize = (16 + Math.random() * 18) + "px";
+    el.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+    el.style.animationDuration = dur + "s";
+    el.style.animationDelay = "-" + delay + "s";
+    bg.appendChild(el);
+    el.addEventListener("animationiteration", function () {
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+    });
+  }
+
+  function burstHearts() {
+    var glyphs = ["💗", "💕", "✨", "🌸"];
+    for (var i = 0; i < 18; i++) {
+      var el = document.createElement("span");
+      el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+      el.style.position = "fixed";
+      el.style.left = (45 + Math.random() * 10) + "vw";
+      el.style.top = "40vh";
+      el.style.fontSize = (20 + Math.random() * 20) + "px";
+      el.style.zIndex = "90";
+      el.style.pointerEvents = "none";
+      document.body.appendChild(el);
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 100 + Math.random() * 220;
+      var dx = Math.cos(angle) * dist;
+      var dy = Math.sin(angle) * dist - 80;
+      var start = performance.now();
+      var dur = 900 + Math.random() * 400;
+      (function (el, dx, dy, start, dur) {
+        function step(now) {
+          var t = Math.min(1, (now - start) / dur);
+          var ease = 1 - Math.pow(1 - t, 2);
+          el.style.transform = "translate(" + dx * ease + "px," + (dy * ease + t * t * 160) + "px) rotate(" + (dx > 0 ? 1 : -1) * t * 180 + "deg)";
+          el.style.opacity = String(1 - t);
+          if (t < 1) requestAnimationFrame(step);
+          else el.remove();
+        }
+        requestAnimationFrame(step);
+      })(el, dx, dy, start, dur);
+    }
+  }
+
+  document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+})();
+</script>
+</body>
+</html>
