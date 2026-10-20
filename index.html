@@ -135,16 +135,20 @@
   }
   #musicBtn.show { display: block; }
 
-  #soundToast {
-    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
-    max-width: 320px; width: calc(100% - 32px);
-    background: #ffffffee; border: 1px solid var(--pink-2);
-    border-radius: 16px; padding: 14px 18px; z-index: 70;
-    box-shadow: 0 8px 22px rgba(224,85,143,.25);
-    font-size: 14px; color: #8a3b5c; text-align: center; line-height: 1.5;
-    opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease;
+  /* ---------- sound reminder screen ---------- */
+  #notice {
+    position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 30%, #fff0f6, var(--pink-2) 120%);
+    padding: 24px;
   }
-  #soundToast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  #notice.show { display: flex; animation: fadeIn .5s ease; }
+  #noticeBtn {
+    margin-top: 22px; width: 100%; padding: 14px; border: none; border-radius: 16px;
+    background: linear-gradient(135deg, var(--pink-3), var(--pink-deep)); color: #fff;
+    font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 0 #b73e73;
+  }
+  #noticeBtn:active { transform: translateY(6px); box-shadow: 0 2px 0 #b73e73; }
 </style>
 </head>
 <body>
@@ -153,7 +157,6 @@
 
 <audio id="bgAudio" src="audio/nhac-nen.mp3" loop preload="none"></audio>
 <button id="musicBtn" aria-label="Tắt/bật nhạc">🎵</button>
-<div id="soundToast">🔔 Nhớ gạt nút chuông sang bật và tăng âm lượng để nghe được nhạc nhé</div>
 <div id="gate">
   <div class="gateCard" id="gateCard">
     <div class="heart">🔐💗</div>
@@ -162,6 +165,15 @@
     <input id="pwInput" type="tel" placeholder="• • • •" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
     <button id="pwBtn">Mở ra 🎀</button>
     <div id="pwHint"></div>
+  </div>
+</div>
+
+<div id="notice">
+  <div class="gateCard">
+    <div class="heart">🔔💗</div>
+    <h1>Trước khi vào...</h1>
+    <p>Nhớ gạt nút chuông sang bật và tăng âm lượng lên để nghe được nhạc nền nhé 🎵</p>
+    <button id="noticeBtn">Tiếp tục 💕</button>
   </div>
 </div>
 
@@ -235,34 +247,20 @@
       .replace(/[^a-z0-9]/g, "");
   }
 
-  var soundToast = document.getElementById("soundToast");
-  var soundToastTimer = null;
-  soundToast.addEventListener("click", hideSoundToast);
-  function showSoundToast() {
-    soundToast.classList.add("show");
-    clearTimeout(soundToastTimer);
-    soundToastTimer = setTimeout(hideSoundToast, 6000);
-  }
-  function hideSoundToast() {
-    soundToast.classList.remove("show");
-  }
-
   var gate = document.getElementById("gate");
   var gateCard = document.getElementById("gateCard");
   var pwInput = document.getElementById("pwInput");
   var pwBtn = document.getElementById("pwBtn");
   var pwHint = document.getElementById("pwHint");
+  var notice = document.getElementById("notice");
+  var noticeBtn = document.getElementById("noticeBtn");
   var main = document.getElementById("main");
 
   function tryUnlock() {
     var val = normalize(pwInput.value || "");
     if (ANSWERS.indexOf(val) !== -1) {
       gate.style.display = "none";
-      main.classList.add("show");
-      startSparkles();
-      musicBtn.classList.add("show");
-      music.start();
-      showSoundToast();
+      notice.classList.add("show");
     } else {
       gateCard.classList.remove("shake");
       void gateCard.offsetWidth;
@@ -270,6 +268,13 @@
       pwHint.textContent = "Chưa đúng rồi, thử lại xem nào 🥺";
     }
   }
+  noticeBtn.addEventListener("click", function () {
+    notice.classList.remove("show");
+    main.classList.add("show");
+    startSparkles();
+    musicBtn.classList.add("show");
+    music.start();
+  });
   pwBtn.addEventListener("click", tryUnlock);
   pwInput.addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock(); });
   pwInput.addEventListener("input", function () {
