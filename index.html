@@ -140,6 +140,7 @@
 
 <div id="bg"></div>
 
+<audio id="bgAudio" src="audio/nhac-nen.mp3" loop preload="none"></audio>
 <button id="musicBtn" aria-label="Tắt/bật nhạc">🎵</button>
 <div id="gate">
   <div class="gateCard" id="gateCard">
@@ -186,103 +187,20 @@
 (function () {
   "use strict";
 
-  // ---------- gentle background melody (synthesized, no external audio file) ----------
+  // ---------- background music (royalty-free track picked by the user) ----------
   var music = (function () {
-    var ctx = null, masterGain = null, padGain = null, playing = false, loopTimer = null;
-    var LOOP_SEC = 16;
-    // warm chord pad: Am7 - F(maj7) - C(maj7) - G, slow romantic loop
-    var CHORDS = [
-      [220.00, 261.63, 329.63, 392.00],   // A3 C4 E4 G4 (Am7)
-      [174.61, 220.00, 261.63, 329.63],   // F3 A3 C4 E4 (Fmaj7)
-      [130.81, 196.00, 261.63, 329.63],   // C3 G3 C4 E4 (Cmaj7)
-      [196.00, 246.94, 293.66, 392.00]    // G3 B3 D4 G4 (G)
-    ];
-    var MELODY = [ // [time, freq] soft lead over the 16s loop
-      [0.5, 659.25], [2.0, 587.33], [3.5, 523.25], [5.0, 587.33],
-      [8.5, 523.25], [10.0, 440.00], [11.5, 523.25], [13.0, 440.00]
-    ];
-    function ensureCtx() {
-      if (!ctx) {
-        var AC = window.AudioContext || window.webkitAudioContext;
-        if (AC) ctx = new AC();
-      }
-      return ctx ? ctx.resume() : Promise.resolve();
-    }
-    function buildBus() {
-      masterGain = ctx.createGain();
-      masterGain.gain.value = 0;
-      masterGain.connect(ctx.destination);
-      // short feedback delay = cheap, warm "reverb" so the synth doesn't sound bare/harsh
-      var delay = ctx.createDelay();
-      delay.delayTime.value = 0.38;
-      var feedback = ctx.createGain();
-      feedback.gain.value = 0.28;
-      var wet = ctx.createGain();
-      wet.gain.value = 0.22;
-      masterGain.connect(delay);
-      delay.connect(feedback);
-      feedback.connect(delay);
-      delay.connect(wet);
-      wet.connect(ctx.destination);
-      padGain = ctx.createGain();
-      padGain.gain.value = 0.22;
-      padGain.connect(masterGain);
-    }
-    function playPadChord(freqs, t, dur) {
-      freqs.forEach(function (freq) {
-        var osc1 = ctx.createOscillator(), osc2 = ctx.createOscillator();
-        var filt = ctx.createBiquadFilter(), g = ctx.createGain();
-        osc1.type = "sine"; osc1.frequency.value = freq;
-        osc2.type = "triangle"; osc2.frequency.value = freq * 1.003; // gentle detune, no beating/harshness
-        filt.type = "lowpass"; filt.frequency.value = 1400;
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.linearRampToValueAtTime(1, t + 2.0);
-        g.gain.linearRampToValueAtTime(1, t + dur - 2.0);
-        g.gain.linearRampToValueAtTime(0.0001, t + dur);
-        osc1.connect(filt); osc2.connect(filt);
-        filt.connect(g).connect(padGain);
-        osc1.start(t); osc2.start(t);
-        osc1.stop(t + dur + 0.1); osc2.stop(t + dur + 0.1);
-      });
-    }
-    function playLead(freq, t, dur) {
-      var osc = ctx.createOscillator();
-      var filt = ctx.createBiquadFilter();
-      var g = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = freq;
-      filt.type = "lowpass";
-      filt.frequency.value = 2200;
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.linearRampToValueAtTime(0.16, t + 0.25);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      osc.connect(filt).connect(g).connect(masterGain);
-      osc.start(t);
-      osc.stop(t + dur + 0.1);
-    }
-    function scheduleLoop() {
-      if (!playing) return;
-      var base = ctx.currentTime + 0.05;
-      var chordDur = LOOP_SEC / CHORDS.length;
-      CHORDS.forEach(function (freqs, i) { playPadChord(freqs, base + i * chordDur, chordDur); });
-      MELODY.forEach(function (n) { playLead(n[1], base + n[0], 1.6); });
-      loopTimer = setTimeout(scheduleLoop, LOOP_SEC * 1000);
-    }
+    var audio = document.getElementById("bgAudio");
+    var playing = false;
+    audio.volume = 0.5;
     return {
       start: function () {
         if (playing) return;
         playing = true;
-        ensureCtx().then(function () {
-          if (!ctx || !playing) return;
-          if (!masterGain) buildBus();
-          masterGain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 1.8);
-          scheduleLoop();
-        });
+        audio.play().catch(function () { playing = false; });
       },
       stop: function () {
         playing = false;
-        if (loopTimer) clearTimeout(loopTimer);
-        if (ctx && masterGain) masterGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+        audio.pause();
       },
       toggle: function () {
         if (playing) this.stop(); else this.start();
